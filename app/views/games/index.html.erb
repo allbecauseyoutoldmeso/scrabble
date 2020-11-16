@@ -1,0 +1,17 @@
+<div class="table" data-controller="drag game">
+  <div data-target="game.rack1"></div>
+  <div class="board">
+    <% 15.times do %>
+      <div class="row">
+        <% 15.times do %>
+          <div class="square"
+            data-action="drop->drag#drop dragover->drag#allowDrop">
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div data-target="game.rack2"></div>
+  <div class="tile-bag">
+  <div>
+</div>

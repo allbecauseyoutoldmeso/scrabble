@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  get 'home/index'
+  root 'games#index'
 
-  root 'home#index'
+  resource :games, only: [:index] do
+    get :all_tiles
+    get :new_hand
+  end
 end
