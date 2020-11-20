@@ -6,34 +6,33 @@ export default class extends Controller {
 
   async initialize() {
     await this.getAllTiles()
-    const hand1 = await this.getHand()
-    this.renderHand({
+    this.updateHand({
       player: 1,
-      rack: this.rack1Target,
-      tiles: hand1
+      target: this.rack1Target
     })
-    const hand2 = await this.getHand()
-    this.renderHand({
+    this.updateHand({
       player: 2,
-      rack: this.rack2Target,
-      tiles: hand2
+      target: this.rack2Target
+    })
+  }
+
+  async updateHand({ player, target }) {
+    const hand = await this.getHand()
+    this.renderHand({
+      player: player,
+      rack: target,
+      tiles: hand
     })
   }
 
   async getHand() {
-    const response = await fetch(`/games/hand?&remaining_tiles=${JSON.stringify(this.remaining_tiles)}`, {
-      headers: {
-        accept: 'application/json'
-      }
-    })
-
-    const text = await response.text()
-    const data = JSON.parse(text)
-    this.remaining_tiles = data.remaining_tiles
-    return data.hand
+    const url = `/games/hand?&remaining_tiles=${JSON.stringify(this.remaining_tiles)}`
+    const { remaining_tiles, hand } = await this.getJson({ url })
+    this.remaining_tiles = remaining_tiles
+    return hand
   }
 
-  async renderHand({ player, rack, tiles }) {
+  renderHand({ player, rack, tiles }) {
     Rails.ajax({
       type: 'GET',
       url: `/games/tile_rack?player=${player}&tiles=${JSON.stringify(tiles)}`,
@@ -44,14 +43,18 @@ export default class extends Controller {
   }
 
   async getAllTiles() {
-    const response = await fetch('/games/all_tiles', {
+    const { tiles } = await this.getJson({ url: '/games/all_tiles' })
+    this.remaining_tiles = tiles
+  }
+
+  async getJson({ url }) {
+    const response = await fetch(url, {
       headers: {
         accept: 'application/json'
       }
     })
 
     const text = await response.text()
-    const tiles = JSON.parse(text).tiles
-    this.remaining_tiles = tiles
+    return JSON.parse(text)
   }
 }
