@@ -6,14 +6,37 @@ export default class extends Controller {
 
   async initialize() {
     await this.getAllTiles()
-    await this.getHand(1, this.rack1Target)
-    await this.getHand(2, this.rack2Target)
+    const hand1 = await this.getHand()
+    this.renderHand({
+      player: 1,
+      rack: this.rack1Target,
+      tiles: hand1
+    })
+    const hand2 = await this.getHand()
+    this.renderHand({
+      player: 2,
+      rack: this.rack2Target,
+      tiles: hand2
+    })
   }
 
-  async getHand(player, rack) {
+  async getHand() {
+    const response = await fetch(`/games/hand?&remaining_tiles=${JSON.stringify(this.remaining_tiles)}`, {
+      headers: {
+        accept: 'application/json'
+      }
+    })
+
+    const text = await response.text()
+    const data = JSON.parse(text)
+    this.remaining_tiles = data.remaining_tiles
+    return data.hand
+  }
+
+  async renderHand({ player, rack, tiles }) {
     Rails.ajax({
       type: 'GET',
-      url: `/games/new_hand?player=${player}&remaining_tiles=${JSON.stringify(this.remaining_tiles)}`,
+      url: `/games/tile_rack?player=${player}&tiles=${JSON.stringify(tiles)}`,
       success: (data, status, xhr) => {
         rack.innerHTML = xhr.response
       }
@@ -27,8 +50,8 @@ export default class extends Controller {
       }
     })
 
-    const data = await response.text()
-    const tiles = JSON.parse(data).tiles
+    const text = await response.text()
+    const tiles = JSON.parse(text).tiles
     this.remaining_tiles = tiles
   }
 }

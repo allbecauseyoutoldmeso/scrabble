@@ -2,11 +2,24 @@ class GamesController < ApplicationController
   def index
   end
 
-  def new_hand
-    player = params[:player].to_i
+  def tile_rack
+    tiles = JSON.parse(params[:tiles])
+    player = params[:player]
+
+    render partial: 'tile_rack', locals:  {
+      tiles: tiles,
+      player: player
+    }
+  end
+
+  def hand
     remaining_tiles = JSON.parse(params[:remaining_tiles])
     hand = remaining_tiles.sample(7)
-    render partial: 'tile_rack', locals:  { player: player, tiles: hand }
+
+    render json: {
+      hand: hand,
+      remaining_tiles: remaining_tiles - hand
+    }
   end
 
   def all_tiles
