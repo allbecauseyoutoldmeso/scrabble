@@ -1,0 +1,13 @@
+.tile-rack {
+  display: flex;
+  flex-direction: row;
+  background-color: $wood-brown;
+  height: 35px;
+  width: 220px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  margin: 10px;
+  border: solid black 0.5px;
+  border-radius: 5px;
+}

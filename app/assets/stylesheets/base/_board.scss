@@ -1,0 +1,32 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  width: fit-content;
+  background-color: $baize-green;
+  border-radius: 5px;
+}
+
+.square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-left: solid white 0.5px;
+
+  &:last-child {
+    border-right: solid white 0.5px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  border-top: solid white 0.5px;
+  margin: 0;
+
+  &:last-child {
+    border-bottom: solid white 0.5px;
+  }
+}

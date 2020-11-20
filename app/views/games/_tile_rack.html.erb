@@ -1,11 +1,9 @@
 <div class="tile-rack">
   <% tiles.each_with_index do |tile, index| %>
-    <div class="tile"
-      id="player-<%= player %>-tile-<%= index %>"
-      draggable="true"
-      data-action="dragstart->drag#setTransferData">
-      <%= tile['letter'] %>
-      <%= tile['points'] %>
-    </div>
+    <%= render partial: 'tile', locals: {
+      tile: tile,
+      player: player,
+      index: index
+    } %>
   <% end %>
 </div>
