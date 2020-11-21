@@ -6,45 +6,62 @@ export default class extends Controller {
 
   async initialize() {
     await this.getAllTiles()
+    this.dealInitialHands()
+  }
+
+  refillRack1() {
+
+  }
+
+  refillRack2() {
+
+  }
+
+  dealInitialHands() {
     this.updateHand({
-      player: 1,
       target: this.rack1Target
     })
     this.updateHand({
-      player: 2,
       target: this.rack2Target
     })
   }
 
-  async updateHand({ player, target }) {
+  async updateHand({ target }) {
     const hand = await this.getHand()
+
     this.renderHand({
-      player: player,
       rack: target,
       tiles: hand
     })
   }
 
   async getHand() {
-    const url = `/games/hand?&remaining_tiles=${JSON.stringify(this.remaining_tiles)}`
-    const { remaining_tiles, hand } = await this.getJson({ url })
-    this.remaining_tiles = remaining_tiles
+    const tileIds = this.tileIds(this.remainingTiles)
+    const url = `/games/hand?&remaining_tile_ids=${JSON.stringify(tileIds)}`
+    const { remainingTiles, hand } = await this.getJson({ url })
+    this.remainingTiles = remainingTiles
     return hand
   }
 
-  renderHand({ player, rack, tiles }) {
+  renderHand({ rack, tiles }) {
+    const tileIds = this.tileIds(tiles)
+
     Rails.ajax({
       type: 'GET',
-      url: `/games/tile_rack?player=${player}&tiles=${JSON.stringify(tiles)}`,
+      url: `/games/tile_rack?&tile_ids=${JSON.stringify(tileIds)}`,
       success: (data, status, xhr) => {
         rack.innerHTML = xhr.response
       }
     })
   }
 
+  tileIds(tiles) {
+    return tiles.map((tile) => tile.id)
+  }
+
   async getAllTiles() {
     const { tiles } = await this.getJson({ url: '/games/all_tiles' })
-    this.remaining_tiles = tiles
+    this.remainingTiles = tiles
   }
 
   async getJson({ url }) {

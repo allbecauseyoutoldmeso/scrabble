@@ -1,0 +1,11 @@
+<div class="board">
+  <% 15.times do %>
+    <div class="row">
+      <% 15.times do %>
+        <div class="square"
+          data-action="drop->drag#drop dragover->drag#allowDrop">
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

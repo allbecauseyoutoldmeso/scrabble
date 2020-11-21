@@ -1,17 +1,9 @@
 <div class="table" data-controller="drag game">
   <div data-target="game.rack1"></div>
-  <div class="board">
-    <% 15.times do %>
-      <div class="row">
-        <% 15.times do %>
-          <div class="square"
-            data-action="drop->drag#drop dragover->drag#allowDrop">
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+  <button data-action="game#refillRack1">get more tiles</button>
+  <%= render partial: 'board' %>
   <div data-target="game.rack2"></div>
+  <button data-action="game#refillRack1">get more tiles</button>
   <div class="tile-bag">
   <div>
 </div>

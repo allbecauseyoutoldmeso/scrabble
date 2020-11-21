@@ -1,9 +1,7 @@
 <div class="tile-rack">
-  <% tiles.each_with_index do |tile, index| %>
+  <% tiles.each do |tile| %>
     <%= render partial: 'tile', locals: {
-      tile: tile,
-      player: player,
-      index: index
+      tile: tile
     } %>
   <% end %>
 </div>
