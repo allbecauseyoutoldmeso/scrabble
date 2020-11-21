@@ -3,8 +3,7 @@ class GamesController < ApplicationController
   end
 
   def tile_rack
-    tile_ids = JSON.parse(params[:tile_ids])
-    tiles = Tile.where(id: tile_ids)
+    tiles = tiles(:tile_ids)
 
     render partial: 'tile_rack', locals:  {
       tiles: tiles
@@ -12,9 +11,9 @@ class GamesController < ApplicationController
   end
 
   def hand
-    remaining_tile_ids = JSON.parse(params[:remaining_tile_ids])
-    remaining_tiles = Tile.where(id: remaining_tile_ids)
-    hand = remaining_tiles.sample(7)
+    tiles_in_rack = tiles(:rack_tile_ids)
+    remaining_tiles = tiles(:remaining_tile_ids)
+    hand = tiles_in_rack + remaining_tiles.sample(7 - tiles_in_rack.count)
 
     render json: {
       hand: hand,
@@ -24,5 +23,12 @@ class GamesController < ApplicationController
 
   def all_tiles
     render json: { tiles: Tile.all }
+  end
+
+  private
+
+  def tiles(key)
+    tile_ids = JSON.parse(params[key])
+    Tile.where(id: tile_ids)
   end
 end

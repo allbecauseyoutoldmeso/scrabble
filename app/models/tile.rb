@@ -13,7 +13,7 @@ class Tile
 
   def self.tiles_with_ids
     tiles.each_with_index.map do |tile, index|
-      tile.merge({ id: index })
+      tile.merge({ id: "tile-#{index}" })
     end
   end
 

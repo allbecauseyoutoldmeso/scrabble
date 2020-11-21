@@ -9,12 +9,26 @@ export default class extends Controller {
     this.dealInitialHands()
   }
 
-  refillRack1() {
-
+  async refillRack1() {
+    this.refillRack(this.rack1Target)
   }
 
-  refillRack2() {
+  async refillRack2() {
+    this.refillRack(this.rack2Target)
+  }
 
+  async refillRack(rack) {
+    const tiles = this.tilesInRack(rack)
+    const hand = await this.getHand(tiles)
+
+    this.renderHand({
+      rack: rack,
+      tiles: hand
+    })
+  }
+
+  tilesInRack(rack) {
+    return Array.from(rack.children[0].children)
   }
 
   dealInitialHands() {
@@ -35,11 +49,12 @@ export default class extends Controller {
     })
   }
 
-  async getHand() {
-    const tileIds = this.tileIds(this.remainingTiles)
-    const url = `/games/hand?&remaining_tile_ids=${JSON.stringify(tileIds)}`
-    const { remainingTiles, hand } = await this.getJson({ url })
-    this.remainingTiles = remainingTiles
+  async getHand(tilesInRack = []) {
+    const rackTileIds = this.tileIds(tilesInRack)
+    const remainingTileIds = this.tileIds(this.remainingTiles)
+    const url = `/games/hand?remaining_tile_ids=${JSON.stringify(remainingTileIds)}&rack_tile_ids=${JSON.stringify(rackTileIds)}`
+    const { remaining_tiles, hand } = await this.getJson({ url })
+    this.remainingTiles = remaining_tiles
     return hand
   }
 
