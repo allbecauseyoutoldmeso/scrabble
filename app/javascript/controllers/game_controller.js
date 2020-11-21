@@ -6,20 +6,26 @@ export default class extends Controller {
 
   async initialize() {
     await this.getAllTiles()
-    this.dealInitialHands()
+    await this.fillRack1()
+    await this.fillRack2()
   }
 
-  async refillRack1() {
-    this.refillRack(this.rack1Target)
+  async getAllTiles() {
+    const { tiles } = await this.getJson({ url: '/games/all_tiles' })
+    this.remainingTiles = tiles
   }
 
-  async refillRack2() {
-    this.refillRack(this.rack2Target)
+  async fillRack1() {
+    this.fillRack(this.rack1Target)
   }
 
-  async refillRack(rack) {
-    const tiles = this.tilesInRack(rack)
-    const hand = await this.getHand(tiles)
+  async fillRack2() {
+    this.fillRack(this.rack2Target)
+  }
+
+  async fillRack(rack) {
+    const tilesInRack = this.tilesInRack(rack)
+    const hand = await this.getHand(tilesInRack)
 
     this.renderHand({
       rack: rack,
@@ -28,31 +34,20 @@ export default class extends Controller {
   }
 
   tilesInRack(rack) {
-    return Array.from(rack.children[0].children)
-  }
-
-  dealInitialHands() {
-    this.updateHand({
-      target: this.rack1Target
-    })
-    this.updateHand({
-      target: this.rack2Target
-    })
-  }
-
-  async updateHand({ target }) {
-    const hand = await this.getHand()
-
-    this.renderHand({
-      rack: target,
-      tiles: hand
-    })
+    const tiles = rack.children[0] && rack.children[0].children
+    return tiles && Array.from(tiles)
   }
 
   async getHand(tilesInRack = []) {
     const rackTileIds = this.tileIds(tilesInRack)
     const remainingTileIds = this.tileIds(this.remainingTiles)
-    const url = `/games/hand?remaining_tile_ids=${JSON.stringify(remainingTileIds)}&rack_tile_ids=${JSON.stringify(rackTileIds)}`
+
+    const params = new URLSearchParams({
+      rack_tile_ids: JSON.stringify(rackTileIds),
+      remaining_tile_ids: JSON.stringify(remainingTileIds)
+    })
+
+    const url = `/games/hand?${params.toString()}`
     const { remaining_tiles, hand } = await this.getJson({ url })
     this.remainingTiles = remaining_tiles
     return hand
@@ -72,11 +67,6 @@ export default class extends Controller {
 
   tileIds(tiles) {
     return tiles.map((tile) => tile.id)
-  }
-
-  async getAllTiles() {
-    const { tiles } = await this.getJson({ url: '/games/all_tiles' })
-    this.remainingTiles = tiles
   }
 
   async getJson({ url }) {
