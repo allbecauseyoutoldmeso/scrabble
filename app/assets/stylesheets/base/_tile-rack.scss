@@ -1,6 +1,4 @@
 .tile-rack {
-  display: flex;
-  flex-direction: row;
   background-color: $wood-brown;
   height: 35px;
   width: 220px;
@@ -10,4 +8,14 @@
   margin: 10px;
   border: solid black 0.5px;
   border-radius: 5px;
+}
+
+.more-tiles-button {
+  color: white;
+  background-color: $button-red;
+  border: none;
+  border-radius: 5px;
+  height: fit-content;
+  padding: 8px;
+  align-self: center;
 }

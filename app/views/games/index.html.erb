@@ -1,9 +1,17 @@
-<div class="table" data-controller="drag game">
-  <div data-target="game.rack1"></div>
-  <button data-action="game#fillRack1">get more tiles</button>
+<div class="flex-direction-column table" data-controller="drag game">
+  <div class="flex-direction-row">
+    <div data-target="game.rack1"></div>
+    <button data-action="game#fillRack1" class="more-tiles-button">
+      GET MORE TILES
+    </button>
+  </div>
   <%= render partial: 'board' %>
-  <div data-target="game.rack2"></div>
-  <button data-action="game#fillRack2">get more tiles</button>
+  <div class="flex-direction-row">
+    <div data-target="game.rack2"></div>
+    <button data-action="game#fillRack2" class="more-tiles-button">
+      GET MORE TILES
+    </button>
+  </div>
   <div class="tile-bag">
   <div>
 </div>

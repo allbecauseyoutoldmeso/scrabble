@@ -1,8 +1,8 @@
-<div class="board">
+<div class="flex-direction-column board">
   <% 15.times do %>
-    <div class="row">
+    <div class="flex-direction-row row">
       <% 15.times do %>
-        <div class="square"
+        <div class="flex-direction-row square"
           data-action="drop->drag#drop dragover->drag#allowDrop">
         </div>
       <% end %>

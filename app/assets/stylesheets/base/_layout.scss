@@ -1,6 +1,13 @@
-.table {
+.flex-direction-row {
+  display: flex;
+}
+
+.flex-direction-column {
   display: flex;
   flex-direction: column;
+}
+
+.table {
   align-items: center;
   font-family: 'Roboto Mono', monospace;
 }
