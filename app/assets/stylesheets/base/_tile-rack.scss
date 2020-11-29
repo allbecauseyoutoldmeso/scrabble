@@ -10,12 +10,14 @@
   border-radius: 5px;
 }
 
-.more-tiles-button {
+.button {
+  margin: 2px;
   color: white;
+  font-size: 12px;
   background-color: $button-red;
   border: none;
   border-radius: 5px;
   height: fit-content;
-  padding: 8px;
+  padding: 6px;
   align-self: center;
 }

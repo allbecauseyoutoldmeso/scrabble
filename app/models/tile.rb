@@ -1,23 +1,41 @@
 class Tile
+  attr_reader :letter, :points
+  attr_accessor :id
+
   def self.all
-    tiles_with_ids
+    tiles
+  end
+
+  def initialize(letter, points)
+    @letter = letter
+    @points = points
   end
 
   def self.where(id:)
-    tiles_with_ids.select do |tile|
-      id.include?(tile[:id])
+    tiles.select do |tile|
+      id.include?(tile.id)
     end
+  end
+
+  def attributes
+    {
+      id: id,
+      letter: letter,
+      points: points
+    }
   end
 
   private
 
-  def self.tiles_with_ids
-    tiles.each_with_index.map do |tile, index|
-      tile.merge({ id: "tile-#{index}" })
+  def self.tiles
+    @tiles ||= tile_attributes.each_with_index.map do |attributes, index|
+      tile = Tile.new(attributes[:letter], attributes[:points])
+      tile.id = index
+      tile
     end
   end
 
-  def self.tiles
+  def self.tile_attributes
     Array.new(9, { letter: 'A', points: 1 }) +
     Array.new(2, { letter: 'B', points: 3 }) +
     Array.new(2, { letter: 'C', points: 3 }) +

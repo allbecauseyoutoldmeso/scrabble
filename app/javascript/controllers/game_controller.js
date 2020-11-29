@@ -2,12 +2,26 @@ import { Controller } from 'stimulus'
 import Rails from '@rails/ujs'
 
 export default class extends Controller {
-  static targets = ['rack1', 'rack2']
+  static targets = [
+    'rack1',
+    'rack2',
+    'board',
+    'player1Points',
+    'player2Points'
+  ]
 
   async initialize() {
     await this.getAllTiles()
     await this.fillRack1()
     await this.fillRack2()
+  }
+
+  submitPlayer1Word() {
+
+  }
+
+  submitPlayer2Word() {
+
   }
 
   async getAllTiles() {
@@ -34,8 +48,11 @@ export default class extends Controller {
   }
 
   tilesInRack(rack) {
-    const tiles = rack.children[0] && rack.children[0].children
-    return tiles && Array.from(tiles)
+    return this.tiles(rack) && Array.from(this.tiles(rack))
+  }
+
+  tiles(rack) {
+    return rack.children[0] && rack.children[0].children
   }
 
   async getHand(tilesInRack = []) {
@@ -61,8 +78,23 @@ export default class extends Controller {
       url: `/games/tile_rack?&tile_ids=${JSON.stringify(tileIds)}`,
       success: (data, status, xhr) => {
         rack.innerHTML = xhr.response
+        this.updateTurn()
+        this.tagTiles(rack)
       }
     })
+  }
+
+  tagTiles(rack) {
+    const tiles = this.tilesInRack(rack)
+    tiles.forEach((tile) => {
+      tile.setAttribute('data-turn', this.turn)
+      tile.setAttribute('data-player', this.player)
+    })
+  }
+
+  updateTurn() {
+    this.turn = (this.turn || 0) + 1
+    this.player = this.player !== 1 ? 1 : 2
   }
 
   tileIds(tiles) {

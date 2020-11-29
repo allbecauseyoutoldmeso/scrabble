@@ -1,0 +1,11 @@
+<div class="flex-direction-row">
+  <div data-target="game.rack<%= player %>"></div>
+  <div class="flex-direction-column">
+    <button data-action="game#fillRack<%= player %>" class="button">
+      GET MORE TILES
+    </button>
+    <button data-action="game#submitPlayer<%= player %>Word" class="button">
+      SUBMIT WORD
+    </button>
+  </div>
+</div>

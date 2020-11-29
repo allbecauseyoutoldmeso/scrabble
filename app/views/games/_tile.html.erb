@@ -1,9 +1,9 @@
 <div class="flex-direction-row tile"
-  id=<%= tile[:id] %>
+  id=<%= tile.id %>
   draggable="true"
   data-action="dragstart->drag#setTransferData">
-  <%= tile[:letter] %>
+  <%= tile.letter %>
   <div class="points">
-    <%= tile[:points] %>
+    <%= tile.points %>
   </div>
 </div>
